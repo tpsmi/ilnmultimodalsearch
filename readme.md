@@ -65,8 +65,9 @@ After following either option, continue with the "Installation" steps in the nex
 ## Data Setup
 
 1. Download the large embedding file:
-   - `OpenClipILNfull.pt` (File size: [Insert file size here, e.g., 2.3GB])
-   - Download link: [Insert download link here]
+   - `OpenClipILNfull.pt` (File size: 211.2 MB)
+   - Download link: https://filesender.surf.nl/?s=download&token=df6f6951-552d-4a06-a94f-3296960a7a0f
+   - Please contact me if the download link is no longer active. 
 
    After downloading, place this file in the `embeddings/` directory.
 
@@ -106,7 +107,7 @@ After following either option, continue with the "Installation" steps in the nex
 
 1. From the project root directory, run:
    ```
-   python app.py
+   python ilnmultimodalsearch.py
    ```
 
 2. The application will automatically open in your default web browser. If it doesn't, manually navigate to `http://127.0.0.1:5000/` in your web browser.
