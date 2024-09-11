@@ -1,6 +1,46 @@
 # Illustrated London News Multimodal Search
 
-This Flask application provides a multimodal search engine for exploring images from the Illustrated London News using textual queries. It is optimized for CPU usage and does not require a GPU.
+This Flask application provides a multimodal search engine for exploring images from the Illustrated London News using textual queries.
+
+## Getting the Project
+
+You can get this project in two ways: cloning the repository using Git or downloading it directly from the GitHub website.
+
+### Option 1: Cloning the Repository (for Git users)
+
+1. Open your command line interface (Command Prompt for Windows or Terminal for Mac).
+2. Navigate to the directory where you want to store the project.
+3. Run the following command:
+   ```
+   git clone https://github.com/tpsmi/ilnmultimodalsearch.git
+   ```
+4. Navigate into the project directory:
+   ```
+   cd ilnmultimodalsearch
+   ```
+
+### Option 2: Downloading from GitHub (for non-Git users)
+
+1. Open your web browser and go to https://github.com/tpsmi/ilnmultimodalsearch
+2. Click on the green "Code" button near the top-right of the page.
+3. In the dropdown menu, click "Download ZIP".
+4. Once the download is complete, locate the ZIP file on your computer (usually in your Downloads folder).
+5. Extract the ZIP file to your desired location.
+6. Open your command line interface:
+   - For Windows: Press Win+R, type `cmd`, and press Enter.
+   - For Mac: Open the Terminal app (you can find it in Applications > Utilities > Terminal).
+7. Navigate to the extracted project folder:
+   - For Windows: 
+     ```
+     cd path\to\ilnmultimodalsearch
+     ```
+   - For Mac:
+     ```
+     cd /path/to/ilnmultimodalsearch
+     ```
+   Replace "path\to" or "/path/to" with the actual path where you extracted the ZIP file.
+
+After following either option, continue with the "Installation" steps in the next section.
 
 ## Prerequisites
 
@@ -9,19 +49,13 @@ This Flask application provides a multimodal search engine for exploring images 
 
 ## Installation
 
-1. Clone this repository:
-   ```
-   git clone https://github.com/yourusername/iln-multimodal-search.git
-   cd iln-multimodal-search
-   ```
-
-2. Create a virtual environment (optional but recommended):
+1. Create a virtual environment (optional but recommended):
    ```
    python -m venv venv
    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
    ```
 
-3. Install the required packages:
+2. Install the required packages:
    ```
    pip install -r requirements.txt
    ```
@@ -30,13 +64,7 @@ This Flask application provides a multimodal search engine for exploring images 
 
 ## Data Setup
 
-1. Download the required data files:
-   - `data/image_paths.json`
-   - `data/iln_text_date_volume_issue_page.csv`
-
-   Place these files in the `data/` directory.
-
-2. Download the large embedding file:
+1. Download the large embedding file:
    - `OpenClipILNfull.pt` (File size: [Insert file size here, e.g., 2.3GB])
    - Download link: [Insert download link here]
 
@@ -104,9 +132,9 @@ Note: The automatic browser opening feature uses Python's built-in `webbrowser` 
 - The app doesn't display images directly but provides links to the Internet Archive.
 - Due to CPU-only optimization, search operations may take longer compared to GPU-accelerated versions.
 
-## Contributing
+## Cite
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+If you need a reference, please cite our paper: 
 
 ## License
 
