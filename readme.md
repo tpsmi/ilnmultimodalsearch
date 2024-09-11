@@ -1,0 +1,113 @@
+# Illustrated London News Multimodal Search
+
+This Flask application provides a multimodal search engine for exploring images from the Illustrated London News using textual queries. It is optimized for CPU usage and does not require a GPU.
+
+## Prerequisites
+
+- Python 3.7+
+- pip (Python package installer)
+
+## Installation
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/iln-multimodal-search.git
+   cd iln-multimodal-search
+   ```
+
+2. Create a virtual environment (optional but recommended):
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
+
+3. Install the required packages:
+   ```
+   pip install -r requirements.txt
+   ```
+
+   Note: This will install CPU-only versions of PyTorch and related packages. No additional installations are needed for the automatic browser opening feature.
+
+## Data Setup
+
+1. Download the required data files:
+   - `data/image_paths.json`
+   - `data/iln_text_date_volume_issue_page.csv`
+
+   Place these files in the `data/` directory.
+
+2. Download the large embedding file:
+   - `OpenClipILNfull.pt` (File size: [Insert file size here, e.g., 2.3GB])
+   - Download link: [Insert download link here]
+
+   After downloading, place this file in the `embeddings/` directory.
+
+   Note: This file is too large for GitHub, so it needs to be downloaded separately.
+
+## Navigating to the Project Directory
+
+### For Windows Users:
+
+1. Open the Command Prompt:
+   - Press `Win + R`, type `cmd`, and press Enter, or
+   - Search for "Command Prompt" in the Start menu
+
+2. Navigate to the cloned repository:
+   ```
+   cd path\to\iln-multimodal-search
+   ```
+   Replace `path\to` with the actual path where you cloned the repository.
+
+   Tip: You can copy the full path from File Explorer by navigating to the folder, clicking in the address bar, and copying the text.
+
+### For Mac Users:
+
+1. Open the Terminal:
+   - Click on the Launchpad icon in the Dock, type "Terminal" in the search field, then click Terminal, or
+   - In the Finder, go to Applications > Utilities > Terminal
+
+2. Navigate to the cloned repository:
+   ```
+   cd /path/to/iln-multimodal-search
+   ```
+   Replace `/path/to` with the actual path where you cloned the repository.
+
+   Tip: You can drag the folder from Finder into the Terminal window to automatically insert the path.
+
+## Running the Application
+
+1. From the project root directory, run:
+   ```
+   python app.py
+   ```
+
+2. The application will automatically open in your default web browser. If it doesn't, manually navigate to `http://127.0.0.1:5000/` in your web browser.
+
+Note: The automatic browser opening feature uses Python's built-in `webbrowser` module and doesn't require any additional installations.
+
+## Usage
+
+1. Enter a search query in the text box.
+2. Select the number of results you want to see.
+3. Click the "Search" button.
+4. The results will display with links to the corresponding pages on the Internet Archive.
+
+## Troubleshooting
+
+- If the browser doesn't open automatically, ensure that you have a default web browser set on your system.
+- If you encounter any issues with automatic browser opening, you can always manually navigate to `http://127.0.0.1:5000/` in your web browser after running the application.
+- If you're running the script in an environment without a graphical interface (e.g., a remote server), the automatic browser opening feature won't work. In this case, you'll need to access the application through a web browser on a machine that can reach the server.
+
+## Notes
+
+- This application uses a CLIP model for multimodal search, optimized for CPU usage.
+- The app doesn't display images directly but provides links to the Internet Archive.
+- Due to CPU-only optimization, search operations may take longer compared to GPU-accelerated versions.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[Specify your license here]

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illustrated London News Multimodal Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .header-image {
+            width: 100%;
+            max-height: 200px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .header-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .explanation {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #results {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .result-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: calc(50% - 10px);
+            box-sizing: border-box;
+        }
+        .result-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .archive-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .archive-link:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Illustrated London News Multimodal Search</h1>
+    <div class="header-image">
+      <img src="{{ url_for('static', filename='header.png') }}" alt="Illustrated London News Header" />
+    </div>
+    <div class="explanation">
+        <h2>What is this?</h2>
+        <p>This multimodal modal search engine allows you to explore the images of the <em>Illustrated London News</em> using textual queries. Based on millions of image-text combinations, Multimodal AI has learned to connect text to images and <em>vice versa</em>. This allows you to not only search for concrete concepts, such as 'steamship' or 'horse' but also for places, such as 'London' or 'Big Ben', and more abstract concepts, such as 'a couple in love', 'an image of war' or 'an image of British colonialism'.</p>
+
+        <h2>How does it work?</h2>
+        <p>The model calculates the distance between the embedding of your query to those of the 72081 images we extracted from the <em>Illustrated London News</em>, 1842-1890. It returns the images that are located the closest to the embedding of your query.</p>
+
+        <h2>Where are the images?</h2>
+        <p>To keep this app lightweight, we do not show you the images but instead refer you the relevant issue and page of the <em>Illustrated London News</em> on the Internet Archive. The pages can be off by 1 page. Please try flipping ahead one page.</p>
+
+        <h2>More information</h2>
+        <p>Want to know more? Please read our paper in Open Humanities Data. Please also refer to this paper if you want to cite this app. Please read this article if you want to know more about multimodal AI and Digital Humanities.
+    </div>
+    <form id="searchForm">
+        <div class="form-group">
+            <label for="query">Search:</label>
+            <input type="text" id="query" placeholder="Enter your search query" required>
+        </div>
+        <div class="form-group">
+            <label for="top_k">Number of results:</label>
+            <input type="number" id="top_k" placeholder="Number of results" value="5" min="1" max="20" required>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+    <div id="error-container" class="error-message"></div>
+    <div id="results"></div>
+    <script>
+        $(document).ready(function() {
+            $('#searchForm').submit(function(e) {
+                e.preventDefault();
+                var query = $('#query').val();
+                var top_k = $('#top_k').val();
+                $('#error-container').empty();
+                $('#results').empty();
+                $.ajax({
+                    url: '/search',
+                    method: 'POST',
+                    data: {query: query, top_k: top_k},
+                    success: function(data) {
+                        var resultsHtml = '';
+                        data.forEach(function(item) {
+                            resultsHtml += '<div class="result-item">';
+                            resultsHtml += '<img src="' + item.image_path + '" alt="Search result">';
+                            resultsHtml += '<p>Similarity: ' + item.similarity.toFixed(4) + '</p>';
+                            if (item.metadata) {
+                                resultsHtml += '<p>Date: ' + (item.metadata.date || 'Not available') + '</p>';
+                                resultsHtml += '<p>Volume: ' + (item.metadata.volume || 'Not available') + '</p>';
+                                resultsHtml += '<p>Issue: ' + (item.metadata.issue || 'Not available') + '</p>';
+                                resultsHtml += '<p>Page: ' + (item.metadata.page_number || 'Not available') + '</p>';
+                                resultsHtml += '<p>Text: ' + (item.metadata.extracted_text || 'Not available') + '</p>';
+                                if (item.archive_url) {
+                                    resultsHtml += '<a href="' + item.archive_url + '" target="_blank" class="archive-link">View on Internet Archive</a>';
+                                }
+                            } else {
+                                resultsHtml += '<p>No metadata available</p>';
+                            }
+                            resultsHtml += '</div>';
+                        });
+                        $('#results').html(resultsHtml);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        var errorMessage = "An error occurred while searching. Please try again.";
+                        if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                            errorMessage = jqXHR.responseJSON.error;
+                        }
+                        $('#error-container').text(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
