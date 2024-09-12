@@ -54,8 +54,13 @@ After following either option, continue with the "Installation" steps in the nex
    python -m venv venv
    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
    ```
+   or
+   ```
+   conda create --name ilnmultimodal
+   conda activate ilnmultimodal
+   ```
 
-2. Install the required packages:
+3. Install the required packages:
    ```
    pip install -r requirements.txt
    ```
