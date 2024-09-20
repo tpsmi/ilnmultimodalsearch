@@ -112,7 +112,7 @@ After following either option, continue with the "Installation" steps in the nex
 
 1. From the project root directory, run:
    ```
-   python ilnmultimodalsearch.py
+   python ilntextimage.py
    ```
 
 2. The application will automatically open in your default web browser. If it doesn't, manually navigate to `http://127.0.0.1:5000/` in your web browser.
@@ -121,10 +121,11 @@ Note: The automatic browser opening feature uses Python's built-in `webbrowser` 
 
 ## Usage
 
-1. Enter a search query in the text box.
+1. Enter a search query in the text box or upload an image. 
 2. Select the number of results you want to see.
-3. Click the "Search" button.
-4. The results will display with links to the corresponding pages on the Internet Archive.
+3. Give a specific date range (in years).
+4. Click the "Search" button.
+5. The results will display with links to the corresponding pages on the Internet Archive.
 
 ## Troubleshooting
 
