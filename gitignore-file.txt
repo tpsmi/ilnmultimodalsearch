@@ -1,0 +1,45 @@
+# PyTorch model files
+*.pt
+
+# macOS generated files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# macOS specific metadata files
+.metadata_never_index
+
+# Directories related to macOS storage and system info
+.fseventsd/
+.TemporaryItems/
+.Com.apple.timemachine.donotpresent/
+.ComAppleBackup.bckup/
+
+# macOS Cache files
+*/.DocumentRevisions-V100/*
+*/.TemporaryItems/*
+*/.Trashes/*
+*/.Spotlight-V100/*
+*/.fseventsd/*

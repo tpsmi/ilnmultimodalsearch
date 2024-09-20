@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illustrated London News Multimodal Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+        }  
+
+        .footer a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .explanation-block {
+            background-color: rgba(200, 200, 200, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .header-image {
+            width: 100%;
+            max-height: 200px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .header-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .explanation {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #results {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .result-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: calc(50% - 10px);
+            box-sizing: border-box;
+        }
+        .result-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .archive-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .archive-link:hover {
+            background-color: #555;
+        }
+        .search-tabs {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .search-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+        }
+        .search-tab.active {
+            background-color: #fff;
+            border-bottom: none;
+        }
+        .search-input {
+            display: none;
+        }
+        .search-input.active {
+            display: block;
+        }
+        input[type="number"].year-input {
+            width: 100px;
+        }
+        .hidden {
+            display: none;
+        }
+        .expand-button {
+            background-color: white;
+            color: black;
+            border: 2px solid black;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+        .expand-button:hover {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-image">
+        <img src="{{ url_for('static', filename='header.png') }}" alt="Illustrated London News Header">
+    </div>
+
+    <h1>Illustrated London News Multimodal Search</h1>
+
+    <div class="explanation-block">
+        <div class="explanation">
+            <p>
+                This multimodal search engine lets you explore 72.000 images from the
+                <em>Illustrated London News</em> (1842-1890) by using either text or
+                image-based queries. Powered by advanced AI, the system has a high-level understanding of the
+                relationships between images and the words that describe them.
+                    When you enter a text description (like "London bridge") or upload an image, the AI model analyzes your input and retrieves
+                    relevant illustrations, whether
+                    you're searching for concrete objects, places, or abstract concepts.
+                    <br><br>
+                    To keep the app lightweight and efficient, we provide a link to the
+                    relevant page of the <em>Illustrated London News</em> on the Internet
+                    Archive instead of displaying the images directly. In some cases, the
+                    page numbers might be off by one, so be sure to check the previous or
+                    next page if needed.
+                </p>
+                <button class="expand-button" onclick="toggleExplanation()">Read more</button>
+                <div id="expandable-content" class="hidden">
+                <h2>How does it work?</h2>
+                <p>
+                    When you submit a query---either text or an image---the model calculates
+                    the similarity between the query's "embedding" (its mathematical
+                    representation) and the embeddings of over 72,000 images we've
+                    extracted from The Illustrated London News. The results show you the
+                    images whose embeddings are closest to your query, offering a quick and
+                    precise way to explore the collection. Unlike traditional image searches
+                    that rely solely on matching text descriptions to images, this
+                    multimodal AI approach understands the relationships between both images
+                    and text at a deeper level. This means you can find images that aren't
+                    just labeled with certain keywords, but that visually or conceptually
+                    match the query---even if the image isn't explicitly tagged with those
+                    words.
+                </p>
+                <h2>More information</h2>
+                <p>
+                    Curious to dive deeper? For more technical details, explore our article
+                    in Open Humanities Data, which also provides citation guidelines if
+                    you'd like to reference this app in your research. You can also read
+                    more about how multimodal AI is transforming Digital Humanities in our
+                    featured article.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <h2>Search</h2>
+
+        <div class="search-tabs">
+            <div id="text-search-tab" class="search-tab active">Text Search</div>
+            <div id="image-search-tab" class="search-tab">Image Search</div>
+        </div>
+
+        <form id="searchForm" enctype="multipart/form-data">
+            <div id="text-search-input" class="search-input active">
+                <div class="form-group">
+                    <label for="query">Search:</label>
+                    <input type="text" id="query" name="query" required>
+                </div>
+            </div>
+
+            <div id="image-search-input" class="search-input">
+                <div class="form-group">
+                    <label for="image">Upload Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="top_k">Number of results:</label>
+                <input type="number" id="top_k" name="top_k" min="1" max="20" value="5">
+            </div>
+
+            <div class="date-range">
+                <div class="form-group">
+                    <label for="start_year">Start Year:</label>
+                    <input type="number" id="start_year" name="start_year" min="1842" max="1890" class="year-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="end_year">End Year:</label>
+                    <input type="number" id="end_year" name="end_year" min="1842" max="1890" class="year-input">
+                </div>
+            </div>
+
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div id="error-container" class="error-message"></div>
+
+    <div id="results"></div>
+
+    <script>
+        function toggleExplanation() {
+            const content = document.getElementById('expandable-content');
+            const button = document.querySelector('.expand-button');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                button.textContent = 'Read less';
+            } else {
+                content.classList.add('hidden');
+                button.textContent = 'Read more';
+            }
+        }
+    
+    $(document).ready(function() {
+        // Tab switching
+        $('#text-search-tab').click(function() {
+            $(this).addClass('active');
+            $('#image-search-tab').removeClass('active');
+            $('#text-search-input').addClass('active');
+            $('#image-search-input').removeClass('active');
+            $('#query').prop('required', true);
+            $('#image').prop('required', false);
+        });
+
+        $('#image-search-tab').click(function() {
+            $(this).addClass('active');
+            $('#text-search-tab').removeClass('active');
+            $('#image-search-input').addClass('active');
+            $('#text-search-input').removeClass('active');
+            $('#image').prop('required', true);
+            $('#query').prop('required', false);
+        });
+
+        // Form submission
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var url = $('#text-search-tab').hasClass('active') ? '/search' : '/image_search';
+            $('#error-container').empty();
+            $('#results').empty();
+
+            // Use year values directly, don't convert to full dates
+            var startYear = $('#start_year').val();
+            var endYear = $('#end_year').val();
+            if (startYear) {
+                formData.set('start_date', startYear);
+            }
+            if (endYear) {
+                formData.set('end_date', endYear);
+            }
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    var resultsHtml = '';
+                    data.forEach(function(item) {
+                        resultsHtml += '<div class="result-item">';
+                        resultsHtml += '<p>Similarity: ' + item.similarity.toFixed(4) + '</p>';
+                        if (item.metadata) {
+                            resultsHtml += '<p>Date: ' + (item.metadata.date || 'Not available') + '</p>';
+                            resultsHtml += '<p>Volume: ' + (item.metadata.volume || 'Not available') + '</p>';
+                            resultsHtml += '<p>Issue: ' + (item.metadata.issue || 'Not available') + '</p>';
+                            resultsHtml += '<p>Page: ' + (item.metadata.page_number || 'Not available') + '</p>';
+                            resultsHtml += '<p>Text: ' + (item.metadata.extracted_text || 'Not available') + '</p>';
+                            if (item.archive_url) {
+                                resultsHtml += '<a href="' + item.archive_url + '" target="_blank" class="archive-link">View on Internet Archive</a>';
+                            }
+                        } else {
+                            resultsHtml += '<p>No metadata available</p>';
+                        }
+                        resultsHtml += '</div>';
+                    });
+                    $('#results').html(resultsHtml);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var errorMessage = "An error occurred while searching. Please try again.";
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                        errorMessage = jqXHR.responseJSON.error;
+                    }
+                    $('#error-container').text(errorMessage);
+                }
+            });
+        });
+    });
+    </script>
+<div class="explanation-block">
+    <div class="explanation">
+      <div style="text-align: center;">
+        <button class="expand-button" onclick="window.open('https://github.com/tpsmi/ilnmultimodalsearch', '_blank')" class="read-more-button">
+          View the source code of this FLASK app on GitHub
+        </button>
+        <button class="expand-button" onclick="window.open('https://github.com/tpsmi/ilnmageextraction', '_blank')" class="read-more-button">
+            The code for the entire project on Github
+          </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
