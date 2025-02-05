@@ -71,7 +71,7 @@ After following either option, continue with the "Installation" steps in the nex
 
 1. Download the large embedding file:
    - `OpenClipILNfull.pt` (File size: 211.2 MB)
-   - Download link: https://filesender.surf.nl/?s=download&token=df6f6951-552d-4a06-a94f-3296960a7a0f
+   - Download link: https://filesender.surf.nl/?s=download&token=0ff0fa11-332b-465f-a204-ca6c06e1b7b3 
    - Please contact me if the download link is no longer active. 
 
    After downloading, place this file in the `embeddings/` directory.
